@@ -8,3 +8,6 @@ class UserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email')
+
+class EmailConfirmForm(forms.Form):
+    code = forms.CharField()
