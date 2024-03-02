@@ -1,4 +1,5 @@
 from django.contrib import admin
-from users import models
+from .models import User,EmailConfirmCodeHelperModel
 # Register your models here.
-admin.site.register(models.User)
+admin.site.register(User)
+admin.site.register(EmailConfirmCodeHelperModel)

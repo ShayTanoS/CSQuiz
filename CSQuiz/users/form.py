@@ -10,4 +10,4 @@ class UserCreationForm(UserCreationForm):
         fields = ('username', 'email')
 
 class EmailConfirmForm(forms.Form):
-    code = forms.CharField()
+    code = forms.IntegerField()

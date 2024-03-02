@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.core.mail import send_mail
 from random import randint
+from .models import EmailConfirmCodeHelperModel, User
 from .form import UserCreationForm, EmailConfirmForm
 # Create your views here.
 class Register(View):
@@ -23,13 +24,10 @@ class Register(View):
                 'Підтвердження email.',
                 f'You code {code}',
                 'cs2quiz2024@gmail.com',
-                email
+                [email]
             )
+            EmailConfirmCodeHelperModel.objects.create(username=username, code=code, email=email,password=password)
             return redirect('email_confirm')
-            form.save()
-            user = authenticate(username=username, password=password)
-            login(request, user)
-
         context = {'form': form}
         return render(request, self.template_name, context)
 
@@ -41,4 +39,16 @@ class EmailConfirm(View):
         return render(request, self.template_name, context)
 
     def post(self, request):
-        pass
+        form = EmailConfirmForm(request.POST)
+        form_data = EmailConfirmCodeHelperModel.objects.last()
+        if form.is_valid():
+            if form.cleaned_data['code'] == form_data.code:
+                user = User.objects.create(username=form_data.username, email=form_data.email)
+                user.set_password(form_data.password)
+                user.save()
+                user = authenticate(username=form_data.username, password=form_data.password)
+                login(request, user)
+                form_data.delete()
+                return redirect('home')
+        form_data.delete()
+        return redirect('email_confirm_fail')
