@@ -6,6 +6,9 @@
             {% csrf_token %}
             <button type="submit">Log out</button>
         </form>
+    {% if user.is_staff %}
+        <a href="{% url 'update_list' %}">Update</a>
+    {% endif %}
 {% else %}
     <a href="{% url 'login' %}">Login</a>|<a href="{% url 'register' %}">Reg</a>
 {% endif %}
