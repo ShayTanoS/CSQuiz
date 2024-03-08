@@ -4,7 +4,7 @@ from django.views import View
 from django.core.mail import send_mail
 from random import randint
 from .models import EmailConfirmCodeHelperModel, User
-from .form import UserCreationForm, EmailConfirmForm
+from .forms import UserCreationForm, EmailConfirmForm
 # Create your views here.
 class Register(View):
     template_name = 'registration/register.html'
