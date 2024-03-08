@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from .forms import AddPlayerForm
+from .forms import AddPlayerForm, QuizForm
 from django.views import View
 import requests
 from .models import Players
 from .functions import url_is_valid, found_info
+import random
 # Create your views here.
 class AddPlayerView(View):
     template_name = 'staff/add_player.html'
@@ -35,4 +36,12 @@ class AddPlayerView(View):
                     message = 'Invalid URL'
         form = AddPlayerForm()
         context = {'form': form, 'message': message}
+        return render(request, self.template_name, context)
+
+class QuizView(View):
+    template_name = 'quiz_page.html'
+    mystery_player = random.choice(Players.objects.all())
+    def get(self, request):
+        form = QuizForm()
+        context = {'form': form}
         return render(request, self.template_name, context)

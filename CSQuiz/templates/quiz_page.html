@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+	<h1>Quiz</h1>
+    <form action="{% url 'quiz_page' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+{% endblock %}
