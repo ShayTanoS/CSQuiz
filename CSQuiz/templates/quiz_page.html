@@ -1,8 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 	<h1>Quiz</h1>
     <form action="{% url 'quiz_page' %}" method="post">
         {% csrf_token %}
         {{ form }}
     </form>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
+  <div id="myDropdown" class="dropdown-content">
+    <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+    <a href="#about">s1mple</a>
+    <a href="#base">b1t</a>
+    <a href="#blog">ropz</a>
+  </div>
+
 {% endblock %}
