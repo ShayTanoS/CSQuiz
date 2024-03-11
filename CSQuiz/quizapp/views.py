@@ -40,8 +40,17 @@ class AddPlayerView(View):
 
 class QuizView(View):
     template_name = 'quiz_page.html'
-    mystery_player = random.choice(Players.objects.all())
+    players = Players.objects.all()
+    mystery_player = random.choice(players)
+    samples_list = []
     def get(self, request):
         form = QuizForm()
-        context = {'form': form}
+        context = {'form': form, 'players': self.players}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        print(request.POST['my_button'])
+        print(self.players.filter(full_player_name=request.POST['my_button']))
+        form = QuizForm()
+        context = {'form': form, 'players': self.players}
         return render(request, self.template_name, context)
