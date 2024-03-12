@@ -5,6 +5,30 @@
     {% csrf_token %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <script src="{% static 'js/script.js' %}"></script>
+    <table>
+    <thead>
+        <tr>
+            <th>Nickname</th>
+            <th>Nationality</th>
+            <th>Team</th>
+            <th>Age</th>
+            <th>Major Winner</th>
+            <th>Major MVP</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in samples_list %}
+        <tr>
+            <td>{{ player.nickname }}</td>
+            <td>{{ player.country }}</td>
+            <td>{{ player.team }}</td>
+            <td>{{ player.age }}</td>
+            <td>{{ player.major_winner }}</td>
+            <td>{{ player.major_MVP }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
     <button onclick="myFunction()" class="dropbtn">Players</button>
     <div id="myDropdown" class="dropdown-content">
         <form action="{% url 'quiz_page' %}" method="post">

@@ -11,10 +11,7 @@ class Players(models.Model):
     team = models.CharField(max_length=30, blank=True, null=True)
     major_winner = models.BooleanField(blank=True, null=True)
     major_MVP = models.BooleanField(blank=True, null=True)
-
-    @property
-    def full_player_name(self):
-        return f"{self.name} '{self.nickname}' {self.surname}"
+    full_player_name = models.CharField(max_length=90, blank=True, null=True, default='player')
 
     def __str__(self):
         return self.full_player_name

@@ -18,7 +18,8 @@ def found_info(profile_number):
     team = re.sub(r'Current teamTeam', '', soup.find(class_='playerTeam').text)
     major_winner = True if soup.findAll(class_='majorWinner') else False
     major_MVP = True if soup.findAll(class_='majorMVP') else False
-    return name, surname, nickname, age, country, team, major_winner, major_MVP
+    full_player_name = f"{name} '{nickname}' {surname}"
+    return name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name
 
 
 
