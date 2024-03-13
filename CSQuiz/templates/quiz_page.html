@@ -19,12 +19,12 @@
     <tbody>
         {% for player in samples_list %}
         <tr>
-            <td {% if player.nickname == mystery_player.nickname %}bgcolor="green"{% else %}bgcolor="red"{% endif %}>{{ player.nickname }}</td>
-            <td {% if player.country == mystery_player.country %}bgcolor="green"{% else %}bgcolor="red"{% endif %}>{{ player.country }}</td>
-            <td {% if player.team == mystery_player.team %}bgcolor="green"{% else %}bgcolor="red"{% endif %}>{{ player.team }}</td>
-            <td {% if player.age == mystery_player.age %}bgcolor="green"{% else %}bgcolor="red"{% endif %}>{{ player.age }}{% if player.age > mystery_player.age %}↓{% else %}{% if player.age < mystery_player.age %}↑{% endif %}{% endif %}</td>
-            <td {% if player.major_winner == mystery_player.major_winner %}bgcolor="green"{% else %}bgcolor="red"{% endif %}>{{ player.major_winner }}</td>
-            <td {% if player.major_MVP == mystery_player.major_MVP %}bgcolor="green"{% else %}bgcolor="red"{% endif %}>{{ player.major_MVP }}</td>
+            <td {% if player.nickname == mystery_player.nickname %}bgcolor="green"{% endif %}>{{ player.nickname }}</td>
+            <td {% if player.country == mystery_player.country %}bgcolor="green"{% endif %}>{{ player.country }}</td>
+            <td {% if player.team == mystery_player.team %}bgcolor="green"{% endif %}>{{ player.team }}</td>
+            <td {% if player.age == mystery_player.age %}bgcolor="green"{% endif %}>{{ player.age }}{% if player.age > mystery_player.age %}↓{% else %}{% if player.age < mystery_player.age %}↑{% endif %}{% endif %}</td>
+            <td {% if player.major_winner == mystery_player.major_winner %}bgcolor="green"{% endif %}>{{ player.major_winner }}</td>
+            <td {% if player.major_MVP == mystery_player.major_MVP %}bgcolor="green"{% endif %}>{{ player.major_MVP }}</td>
         </tr>
         {% endfor %}
     </tbody>

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .forms import AddPlayerForm, QuizForm
 from django.views import View
 from .models import Players
-from .functions import url_is_valid, found_info
+from .functions import add_player_to_DB, add_team_to_DB
 import random
 
 
@@ -16,28 +16,13 @@ class AddPlayerView(View):
 
     def post(self, request):
         form = AddPlayerForm(request.POST)
-        message = 'Wrong'
+        message = []
         if form.is_valid():
             number = form.cleaned_data['number']
-            if Players.objects.filter(profile_number=number).exists():
-                message = 'Player in DB already exists'
+            if request.POST['button'] == 'player':
+                message.append(add_player_to_DB(number))
             else:
-                if url_is_valid(number):
-                    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name = found_info(
-                        number)
-                    Players.objects.create(profile_number=number,
-                                           nickname=nickname,
-                                           name=name,
-                                           surname=surname,
-                                           age=age,
-                                           country=country,
-                                           team=team,
-                                           major_winner=major_winner,
-                                           major_MVP=major_MVP,
-                                           full_player_name=full_player_name)
-                    message = 'Successfully added ' + nickname + ' to DB'
-                else:
-                    message = 'Invalid URL'
+                message = add_team_to_DB(number)
         form = AddPlayerForm()
         context = {'form': form, 'message': message}
         return render(request, self.template_name, context)
