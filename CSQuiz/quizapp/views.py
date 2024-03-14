@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .forms import AddPlayerForm, QuizForm
+from .forms import AddPlayerForm
 from django.views import View
 from .models import Players
-from .functions import add_player_to_DB, add_team_to_DB
+from .functions import add_player_to_DB, add_team_to_DB, update_player
 import random
 
 
@@ -27,24 +27,32 @@ class AddPlayerView(View):
         context = {'form': form, 'message': message}
         return render(request, self.template_name, context)
 
-
+def update_BD(request):
+    players = Players.objects.all()
+    context = {'players': players}
+    if request.method == 'GET':
+        return render(request, 'staff/update_BD.html', context)
+    if request.method == 'POST':
+        if request.POST['button'] == 'all':
+            for player in players:
+                update_player(player)
+        else:
+            current_player = players.filter(full_player_name=request.POST['button']).first()
+            update_player(current_player)
+        return render(request, 'staff/update_BD.html', context)
 class QuizView(View):
     template_name = 'quiz_page.html'
     @classmethod
     def get(cls, request):
-        form = QuizForm()
         cls.players = Players.objects.all()
         cls.mystery_player = random.choice(cls.players)
         cls.samples_list = []
-        print(cls.mystery_player, 'get')
-        context = {'form': form, 'players': cls.players}
+        context = {'players': cls.players}
         return render(request, cls.template_name, context)
 
     def post(self, request):
         current_player = self.players.filter(full_player_name=request.POST['my_button']).first()
-        print(self.mystery_player, 'post')
         self.samples_list.append(current_player)
-        form = QuizForm()
-        context = {'form': form, 'players': self.players, 'samples_list': self.samples_list,
+        context = {'players': self.players, 'samples_list': self.samples_list,
                    'mystery_player': self.mystery_player}
         return render(request, self.template_name, context)

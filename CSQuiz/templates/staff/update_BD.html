@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+	<h1>Update</h1>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
+    <button onclick="myFunction()" class="dropbtn">Players</button>
+    <div id="myDropdown" class="dropdown-content">
+        <form action="{% url 'update_BD' %}" method="post">
+            {% csrf_token %}
+            <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+            {% for item in players %}
+                <button type="submit" value="{{ item }}" name="button">{{ item }}</button>
+            {% endfor %}
+        </form>
+    </div>
+    <form action="{% url 'update_BD' %}" method='post'>
+        {% csrf_token %}
+        <button type="submit" value="all" name="button">Update All</button>
+    </form>
+
+{% endblock %}

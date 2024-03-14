@@ -34,11 +34,9 @@
         <form action="{% url 'quiz_page' %}" method="post">
             {% csrf_token %}
             <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-            <ul>
             {% for item in players %}
                 <button type="submit" value="{{ item }}" name="my_button">{{ item }}</button>
             {% endfor %}
-            </ul>
         </form>
     </div>
 

@@ -24,6 +24,21 @@ def found_info(profile_number):
     full_player_name = f"{name} '{nickname}' {surname}"
     return name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name
 
+def update_player(player):
+    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name = found_info(player.profile_number)
+    player.name = name
+    player.surname = surname
+    player.nickname = nickname
+    player.age = age
+    player.country = country
+    player.team = team
+    player.major_winner = major_winner
+    player.major_MVP = major_MVP
+    player.full_player_name = full_player_name
+    player.save()
+
+
+
 def add_player_to_DB(number):
     if Players.objects.filter(profile_number=number).exists():
         message = f'{Players.objects.filter(profile_number=number)[0].nickname} in DB already exists'
