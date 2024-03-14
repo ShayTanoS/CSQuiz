@@ -27,6 +27,7 @@ class AddPlayerView(View):
         context = {'form': form, 'message': message}
         return render(request, self.template_name, context)
 
+
 def update_BD(request):
     players = Players.objects.all()
     context = {'players': players}
@@ -40,8 +41,11 @@ def update_BD(request):
             current_player = players.filter(full_player_name=request.POST['button']).first()
             update_player(current_player)
         return render(request, 'staff/update_BD.html', context)
+
+
 class QuizView(View):
     template_name = 'quiz_page.html'
+
     @classmethod
     def get(cls, request):
         cls.players = Players.objects.all()
@@ -51,7 +55,7 @@ class QuizView(View):
         return render(request, cls.template_name, context)
 
     def post(self, request):
-        current_player = self.players.filter(full_player_name=request.POST['my_button']).first()
+        current_player = self.players.filter(full_player_name=request.POST['button']).first()
         self.samples_list.append(current_player)
         context = {'players': self.players, 'samples_list': self.samples_list,
                    'mystery_player': self.mystery_player}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-    {% load static %}
     <h1>Quiz</h1>
     {% csrf_token %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -20,7 +20,7 @@
         {% for player in samples_list %}
         <tr>
             <td {% if player.nickname == mystery_player.nickname %}bgcolor="green"{% endif %}>{{ player.nickname }}</td>
-            <td {% if player.country == mystery_player.country %}bgcolor="green"{% endif %}>{{ player.country }}</td>
+            <td {% if player.country == mystery_player.country %}bgcolor="green"{% endif %}><img src="{% static 'img/flags/' %}{{ player.country }}.svg"></td>
             <td {% if player.team == mystery_player.team %}bgcolor="green"{% endif %}>{{ player.team }}</td>
             <td {% if player.age == mystery_player.age %}bgcolor="green"{% endif %}>{{ player.age }}{% if player.age > mystery_player.age %}↓{% else %}{% if player.age < mystery_player.age %}↑{% endif %}{% endif %}</td>
             <td {% if player.major_winner == mystery_player.major_winner %}bgcolor="green"{% endif %}>{{ player.major_winner }}</td>
@@ -35,7 +35,7 @@
             {% csrf_token %}
             <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
             {% for item in players %}
-                <button type="submit" value="{{ item }}" name="my_button">{{ item }}</button>
+                <button type="submit" value="{{ item }}" name="button">{{ item }}</button>
             {% endfor %}
         </form>
     </div>
