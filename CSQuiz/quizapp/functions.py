@@ -2,6 +2,7 @@ import cfscrape
 from bs4 import BeautifulSoup as BS
 import re
 from .models import Players
+from .constants import COUNTRY_REGIONS
 
 def url_is_valid(sector, profile_number):
     scraper = cfscrape.create_scraper()
@@ -22,10 +23,13 @@ def found_info(profile_number):
     major_winner = True if soup.findAll(class_='majorWinner') else False
     major_MVP = True if soup.findAll(class_='majorMVP') else False
     full_player_name = f"{name} '{nickname}' {surname}"
-    return name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name
+    for reg in COUNTRY_REGIONS:
+        if country in COUNTRY_REGIONS[reg]:
+            region = reg
+    return name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region
 
 def update_player(player):
-    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name = found_info(player.profile_number)
+    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region = found_info(player.profile_number)
     player.name = name
     player.surname = surname
     player.nickname = nickname
@@ -35,6 +39,7 @@ def update_player(player):
     player.major_winner = major_winner
     player.major_MVP = major_MVP
     player.full_player_name = full_player_name
+    player.region = region
     player.save()
 
 

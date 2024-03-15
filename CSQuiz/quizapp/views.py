@@ -57,6 +57,8 @@ class QuizView(View):
     def post(self, request):
         current_player = self.players.filter(full_player_name=request.POST['button']).first()
         self.samples_list.append(current_player)
+        win = current_player ==self.mystery_player
+        game_over = win or len(self.samples_list) == 8
         context = {'players': self.players, 'samples_list': self.samples_list,
-                   'mystery_player': self.mystery_player}
+                   'mystery_player': self.mystery_player, 'win': win, 'game_over': game_over}
         return render(request, self.template_name, context)

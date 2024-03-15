@@ -12,9 +12,17 @@ COUNTRY_REGIONS = {
                "Portugal", "Hungary", "Romania", "Ireland", "Slovakia", "Croatia", "Bosnia and Herzegovina", "Estonia",
                "Lithuania", "Latvia", "Slovenia", "Montenegro", "North Macedonia", "Kosovo", "Serbia", "Albania",
                "Andorra", "Monaco", "San Marino", "Vatican City"],
-    "Asia": ["China", "Turkey", "India", "Indonesia", "Pakistan", "Bangladesh", "Japan", "Philippines", "Vietnam",
+    "Asia": ["China", "Turkey", "Israel", "India", "Indonesia", "Pakistan", "Bangladesh", "Japan", "Philippines",
+             "Vietnam",
              "Thailand", "Myanmar", "South Korea", "Afghanistan", "Saudi Arabia", "Malaysia", "Yemen", "Nepal",
              "North Korea", "Sri Lanka", "Syria", "Cambodia", "Jordan", "United Arab Emirates", "Laos", "Lebanon",
              "Singapore", "Oman", "State of Palestine", "Kuwait", "Mongolia", "Qatar", "Bahrain", "Timor-Leste",
              "Bhutan", "Maldives", "Brunei"],
+    "Africa": ["Nigeria", "Ethiopia", "Egypt", "Democratic Republic of the Congo", "Tanzania", "South Africa", "Kenya",
+               "Uganda", "Algeria", "Sudan", "Morocco", "Angola", "Mozambique", "Ghana", "Madagascar", "Cameroon",
+               "Côte d'Ivoire", "Niger", "Burkina Faso", "Mali", "Malawi", "Zambia", "Senegal", "Chad", "Somalia",
+               "Zimbabwe", "Guinea", "Rwanda", "Benin", "Burundi", "Tunisia", "South Sudan", "Togo", "Sierra Leone",
+               "Libya", "Congo", "Liberia", "Central African Republic", "Mauritania", "Eritrea", "Namibia", "Gambia",
+               "Botswana", "Gabon", "Lesotho", "Guinea-Bissau", "Equatorial Guinea", "Mauritius", "Eswatini",
+               "Djibouti", "Comoros", "Cabo Verde", "Sao Tome and Principe", "Seychelles"]
 }
