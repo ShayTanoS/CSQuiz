@@ -12,5 +12,6 @@ class Players(models.Model):
     major_MVP = models.BooleanField(blank=True, null=True)
     full_player_name = models.CharField(max_length=90, blank=True, null=True, default='player')
     region = models.CharField(max_length=90, blank=True, null=True, default='Earth')
+    weapon = models.CharField(max_length=60, blank=True, null=True, default='Rifler')
     def __str__(self):
         return self.full_player_name

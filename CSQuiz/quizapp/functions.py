@@ -4,11 +4,14 @@ import re
 from .models import Players
 from .constants import COUNTRY_REGIONS
 
+
 def url_is_valid(sector, profile_number):
     scraper = cfscrape.create_scraper()
     url = f'https://www.hltv.org/{sector}/{str(profile_number)}/find'
     status = scraper.get(url).status_code
     return status == 200
+
+
 def found_info(profile_number):
     scraper = cfscrape.create_scraper()
     url = f'https://www.hltv.org/player/{str(profile_number)}/find'
@@ -26,10 +29,21 @@ def found_info(profile_number):
     for reg in COUNTRY_REGIONS:
         if country in COUNTRY_REGIONS[reg]:
             region = reg
-    return name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region
+
+    url = f'https://www.hltv.org/stats/players/weapon/{str(profile_number)}/find'
+    status = 403
+    while status == 403:
+        req = scraper.get(url)
+        status = req.status_code
+    html = req.content
+    soup = BS(html, 'html.parser')
+    weapon = 'AWP' if soup.find(class_='stats-row').find_all('span')[1].text.strip() == 'awp' else 'Rifler'
+    return name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon
+
 
 def update_player(player):
-    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region = found_info(player.profile_number)
+    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon = found_info(
+        player.profile_number)
     player.name = name
     player.surname = surname
     player.nickname = nickname
@@ -40,8 +54,8 @@ def update_player(player):
     player.major_MVP = major_MVP
     player.full_player_name = full_player_name
     player.region = region
+    player.weapon = weapon
     player.save()
-
 
 
 def add_player_to_DB(number):
@@ -49,7 +63,7 @@ def add_player_to_DB(number):
         message = f'{Players.objects.filter(profile_number=number)[0].nickname} in DB already exists'
     else:
         if url_is_valid('player', number):
-            name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name = found_info(
+            name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon = found_info(
                 number)
             Players.objects.create(profile_number=number,
                                    nickname=nickname,
@@ -60,11 +74,14 @@ def add_player_to_DB(number):
                                    team=team,
                                    major_winner=major_winner,
                                    major_MVP=major_MVP,
-                                   full_player_name=full_player_name)
+                                   full_player_name=full_player_name,
+                                   region=region,
+                                   weapon=weapon)
             message = 'Successfully added ' + nickname + ' to DB'
         else:
             message = 'Invalid URL'
     return message
+
 
 def add_team_to_DB(number):
     if url_is_valid('team', number):
@@ -79,4 +96,3 @@ def add_team_to_DB(number):
         return message
     else:
         return ['Invalid URL']
-
