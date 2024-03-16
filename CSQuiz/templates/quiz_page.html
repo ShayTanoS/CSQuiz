@@ -13,6 +13,7 @@
             <th>Team</th>
             <th>Age</th>
             <th>Weapon</th>
+            <th>Major Played</th>
             <th>Major Winner</th>
             <th>Major MVP</th>
         </tr>
@@ -29,6 +30,9 @@
                     {{ player.age }}{% if player.age > mystery_player.age %}↓
                         {% else %}{% if player.age < mystery_player.age %}↑{% endif %}{% endif %}</td>
                 <td {% if player.weapon == mystery_player.weapon %}bgcolor="green"{% endif %}>{{ player.weapon }}</td>
+                <td {% if player.major_played == mystery_player.major_played %}bgcolor="green"{% endif %}>
+                    {{ player.major_played }}{% if player.major_played > mystery_player.major_played %}↓
+                        {% else %}{% if player.major_played < mystery_player.major_played %}↑{% endif %}{% endif %}</td>
                 <td {% if player.major_winner == mystery_player.major_winner %}bgcolor="green"{% endif %}>{{ player.major_winner }}</td>
                 <td {% if player.major_MVP == mystery_player.major_MVP %}bgcolor="green"{% endif %}>{{ player.major_MVP }}</td>
             </tr>

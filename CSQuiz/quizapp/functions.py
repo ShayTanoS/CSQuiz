@@ -38,11 +38,20 @@ def found_info(profile_number):
     html = req.content
     soup = BS(html, 'html.parser')
     weapon = 'AWP' if soup.find(class_='stats-row').find_all('span')[1].text.strip() == 'awp' else 'Rifler'
-    return name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon
+
+    url = f'https://www.hltv.org/player/{str(profile_number)}/find#tab-achievementBox'
+    html = scraper.get(url).content
+    soup = BS(html, 'html.parser')
+    res = soup.find(class_='sub-tab-content')
+    if res.text.split()[0] == 'Major':
+        major_played = res.find_all(class_='highlighted-stat')[1].find(class_='stat').text
+    else:
+        major_played = 0
+    return name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon, major_played
 
 
 def update_player(player):
-    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon = found_info(
+    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon, major_played = found_info(
         player.profile_number)
     player.name = name
     player.surname = surname
@@ -55,6 +64,7 @@ def update_player(player):
     player.full_player_name = full_player_name
     player.region = region
     player.weapon = weapon
+    player.major_played = major_played
     player.save()
 
 
@@ -63,7 +73,7 @@ def add_player_to_DB(number):
         message = f'{Players.objects.filter(profile_number=number)[0].nickname} in DB already exists'
     else:
         if url_is_valid('player', number):
-            name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon = found_info(
+            name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon, major_played = found_info(
                 number)
             Players.objects.create(profile_number=number,
                                    nickname=nickname,
@@ -76,7 +86,8 @@ def add_player_to_DB(number):
                                    major_MVP=major_MVP,
                                    full_player_name=full_player_name,
                                    region=region,
-                                   weapon=weapon)
+                                   weapon=weapon,
+                                   major_played=major_played)
             message = 'Successfully added ' + nickname + ' to DB'
         else:
             message = 'Invalid URL'
@@ -96,3 +107,4 @@ def add_team_to_DB(number):
         return message
     else:
         return ['Invalid URL']
+
