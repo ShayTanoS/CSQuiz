@@ -52,3 +52,8 @@ class EmailConfirm(View):
                 return redirect('home')
         form_data.delete()
         return redirect('email_confirm_fail')
+
+
+def profile_view(request):
+    if request.method == 'GET':
+        return render(request, 'profile.html')
