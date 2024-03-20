@@ -6,7 +6,7 @@
         User: <a href="{% url 'profile' %}">{{ user }}</a>
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Log out</button>
+            <button type="submit" class="btn">Log out</button>
         </form>
     {% else %}
         <a href="{% url 'login' %}" class="button">Login</a>|<a class="button" href="{% url 'register' %}">Reg</a>

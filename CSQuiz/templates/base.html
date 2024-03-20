@@ -1,4 +1,7 @@
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,17 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSQuiz</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-
 </head>
 <header>
     <table class="header">
-    <thead>
+        <thead class="">
         <th>{% block head_left %}
         {% endblock %}</th>
         <th><a href="{% url 'home' %}"><img class="logo" src="{% static 'img/logo.png' %}" alt="logo"></a></th>
         <th>{% block head_right %}
         {% endblock %}</th>
-    </thead>
+        </thead>
     </table>
 </header>
 <body>
