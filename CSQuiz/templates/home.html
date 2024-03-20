@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
-{% block content %}
-    User: <a href="{% url 'profile' %}">{{ user }}</a>
-{% if user.is_authenticated %}
-    <form action="{% url 'logout' %}" method="post">
+{% block head_right %}
+    <div class="auth">
+    {% if user.is_authenticated %}
+
+        User: <a href="{% url 'profile' %}">{{ user }}</a>
+        <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <button type="submit">Log out</button>
+            <button type="submit" class="btn btn-primary">Log out</button>
         </form>
-    {% if user.is_staff %}
-        <a href="{% url 'update_list' %}">Update</a>
+    {% else %}
+        <a href="{% url 'login' %}" class="button">Login</a>|<a class="button" href="{% url 'register' %}">Reg</a>
     {% endif %}
-{% else %}
-    <a href="{% url 'login' %}">Login</a>|<a href="{% url 'register' %}">Reg</a>
-{% endif %}
-    <a href="{% url 'quiz_page' %}">Let`s Go</a>
+    </div>
+{% endblock %}
+{% block head_left %}
+    {% if user.is_staff %}
+        <a class="button" href="{% url 'update_list' %}">Update</a>
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <a class="button start-game" href="{% url 'quiz_page' %}">Let`s Go</a>
 {% endblock %}

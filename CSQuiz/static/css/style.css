@@ -1,0 +1,65 @@
+img.logo {
+    width: 60%;
+    height: 60%;
+    display: block;
+    margin: 0 auto;
+}
+.auth{
+    float: left;
+}
+a.button {
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #ff712d;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+table.header{
+    height: 200px;
+    margin: 0 auto;
+}
+table.header > thead{
+    width: 100%;
+}
+
+.quiz {
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.start-game {
+    width: 30%;
+    height: 20%;
+    display: block;
+    margin: 0 auto;
+}
+
+a:hover {
+    background-color: orange;
+}
+
+body {
+    background-color: gold;
+}
+
+.dropdown-content{
+    height: 300px;
+    width: 35%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 0 auto;
+}
+
+.dropdown-content button {
+    display: block;
+    width: 100%;
+    height: 50px;
+}
+#myInput{
+    width: 100%;
+    height: 50px;
+}

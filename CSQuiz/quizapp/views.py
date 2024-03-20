@@ -61,11 +61,12 @@ class QuizView(View):
         game_over = win or len(self.samples_list) == 8
         if game_over:
             user = request.user
-            if win:
-                user.quizzes_win += 1
-            else:
-                user.quizzes_lose += 1
-            user.save()
+            if user.is_authenticated:
+                if win:
+                    user.quizzes_win += 1
+                else:
+                    user.quizzes_lose += 1
+                user.save()
         context = {'players': self.players, 'samples_list': self.samples_list,
                    'mystery_player': self.mystery_player, 'win': win, 'game_over': game_over}
         return render(request, self.template_name, context)
