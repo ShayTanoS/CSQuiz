@@ -51,19 +51,27 @@ def found_info(profile_number):
 
 
 def update_player(player):
-    name, surname, nickname, age, country, team, major_winner, major_MVP, full_player_name, region, weapon, major_played = found_info(
-        player.profile_number)
-    player.name = name
-    player.surname = surname
-    player.nickname = nickname
+    scraper = cfscrape.create_scraper()
+    url = f'https://www.hltv.org/player/{str(player.profile_number)}/find'
+    html = scraper.get(url).content
+    soup = BS(html, 'html.parser')
+    age = re.search(r'\d+', soup.find(class_='playerAge').text).group()
+    team = re.sub(r'Current teamTeam', '', soup.find(class_='playerTeam').text)
+    major_winner = True if soup.findAll(class_='majorWinner') else False
+    major_MVP = True if soup.findAll(class_='majorMVP') else False
+    url = f'https://www.hltv.org/player/{str(player.profile_number)}/find#tab-achievementBox'
+    html = scraper.get(url).content
+    soup = BS(html, 'html.parser')
+    res = soup.find(class_='sub-tab-content')
+    if res.text.split()[0] == 'Major':
+        major_played = res.find_all(class_='highlighted-stat')[1].find(class_='stat').text
+    else:
+        major_played = 0
+
     player.age = age
-    player.country = country
     player.team = team
     player.major_winner = major_winner
     player.major_MVP = major_MVP
-    player.full_player_name = full_player_name
-    player.region = region
-    player.weapon = weapon
     player.major_played = major_played
     player.save()
 

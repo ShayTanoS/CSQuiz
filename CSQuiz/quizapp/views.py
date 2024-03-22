@@ -43,6 +43,17 @@ def update_BD(request):
         return render(request, 'staff/update_BD.html', context)
 
 
+def delete_player(request):
+    players = Players.objects.all()
+    context = {'players': players}
+    if request.method == 'GET':
+        return render(request, 'staff/delete_player.html', context)
+    if request.method == 'POST':
+        current_player = players.filter(full_player_name=request.POST['button']).first()
+        current_player.delete()
+    return render(request, 'staff/delete_player.html', context)
+
+
 class QuizView(View):
     template_name = 'quiz_page.html'
 
@@ -58,7 +69,7 @@ class QuizView(View):
         current_player = self.players.filter(full_player_name=request.POST['button']).first()
         self.samples_list.append(current_player)
         win = current_player == self.mystery_player
-        game_over = win or len(self.samples_list) == 8
+        game_over = win or len(self.samples_list) >= 8
         if game_over:
             user = request.user
             if user.is_authenticated:

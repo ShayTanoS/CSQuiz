@@ -3,55 +3,78 @@
 {% block content %}
     {% csrf_token %}
     <script src="{% static 'js/script.js' %}"></script>
-    <table class="quiz">
-        <thead>
-        <tr>
-            <th>Nickname</th>
-            <th>Nationality</th>
-            <th>Team</th>
-            <th>Age</th>
-            <th>Weapon</th>
-            <th>Major Played</th>
-            <th>Major Winner</th>
-            <th>Major MVP</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for player in samples_list %}
+    <div class="d-flex justify-content-center align-items-center">
+        <table class="table-bordered" bgcolor="#ff712d">
+            <thead>
             <tr>
-                <td {% if player.nickname == mystery_player.nickname %}bgcolor="green"{% endif %}>{{ player.nickname }}</td>
-                <td {% if player.country == mystery_player.country %}bgcolor="green"
-                    {% else %}{% if player.region == mystery_player.region %}bgcolor="yellow"{% endif %}{% endif %}><img
-                        src="{% static 'img/flags/' %}{{ player.country }}.svg"></td>
-                <td {% if player.team == mystery_player.team %}bgcolor="green"{% endif %}>{{ player.team }}</td>
-                <td {% if player.age == mystery_player.age %}bgcolor="green"{% endif %}>
-                    {{ player.age }}{% if player.age > mystery_player.age %}↓
-                        {% else %}{% if player.age < mystery_player.age %}↑{% endif %}{% endif %}</td>
-                <td {% if player.weapon == mystery_player.weapon %}bgcolor="green"{% endif %}>{{ player.weapon }}</td>
-                <td {% if player.major_played == mystery_player.major_played %}bgcolor="green"{% endif %}>
-                    {{ player.major_played }}{% if player.major_played > mystery_player.major_played %}↓
-                        {% else %}{% if player.major_played < mystery_player.major_played %}↑{% endif %}{% endif %}</td>
-                <td {% if player.major_winner == mystery_player.major_winner %}bgcolor="green"{% endif %}>{{ player.major_winner }}</td>
-                <td {% if player.major_MVP == mystery_player.major_MVP %}bgcolor="green"{% endif %}>{{ player.major_MVP }}</td>
+                <th>Nickname</th>
+                <th>Nationality</th>
+                <th>Team</th>
+                <th>Age</th>
+                <th>Weapon</th>
+                <th>Major Played</th>
+                <th>Major Winner</th>
+                <th>Major MVP</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for player in samples_list %}
+                <tr>
+                    <td {% if player.nickname == mystery_player.nickname %}bgcolor="green"{% endif %}>{{ player.nickname }}</td>
+                    <td {% if player.country == mystery_player.country %}bgcolor="green"
+                        {% else %}{% if player.region == mystery_player.region %}bgcolor="yellow"{% endif %}{% endif %}>
+                        <img
+                                src="{% static 'img/flags/' %}{{ player.country }}.svg" class="flag"></td>
+                    <td {% if player.team == mystery_player.team %}bgcolor="green"{% endif %}>{{ player.team }}</td>
+                    <td {% if player.age == mystery_player.age %}bgcolor="green"{% endif %}>
+                        {{ player.age }}{% if player.age > mystery_player.age %}↓
+                            {% else %}{% if player.age < mystery_player.age %}↑{% endif %}{% endif %}</td>
+                    <td {% if player.weapon == mystery_player.weapon %}bgcolor="green"{% endif %}>{{ player.weapon }}</td>
+                    <td {% if player.major_played == mystery_player.major_played %}bgcolor="green"{% endif %}>
+                        {{ player.major_played }}{% if player.major_played > mystery_player.major_played %}↓
+                            {% else %}{% if player.major_played < mystery_player.major_played %}↑
+                            {% endif %}{% endif %}</td>
+                    <td {% if player.major_winner == mystery_player.major_winner %}bgcolor="green"{% endif %}>{{ player.major_winner }}</td>
+                    <td {% if player.major_MVP == mystery_player.major_MVP %}bgcolor="green"{% endif %}>{{ player.major_MVP }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% if game_over %}
-        {% if win %}
-            <h1>Congratulations</h1>
-        {% else %}
-            <h1>You lose</h1>
-        {% endif %}
-        <h1>Mystery player: {{ mystery_player }}</h1>
-        <a href="{% url 'quiz_page' %}">Play again?</a>
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{% if win %}
+                            Congratulations
+                        {% else %}
+                            You lose
+                        {% endif %}</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        Mystery player: {{ mystery_player }}
+                    </div>
+                    <div class="modal-footer">
+                        <a class='btn' href="{% url 'quiz_page' %}">Play again?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var myModal = document.getElementById('myModal');
+            var myModalInstance = new bootstrap.Modal(myModal);
+            myModalInstance.show();
+        </script>
     {% else %}
         <div id="myDropdown" class="dropdown-content">
             <form action="{% url 'quiz_page' %}" method="post">
                 {% csrf_token %}
                 <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
                 {% for item in players %}
-                    <button type="submit" value="{{ item }}" name="button">{{ item }}</button>
+                    <button class='btn' type="submit" value="{{ item }}"
+                            name="button">{{ item }}</button>
                 {% endfor %}
             </form>
         </div>

@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
     <form action="{% url "register" %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Submit</button>
+        {% csrf_token %}
+        <div class="form">
+            {{ form }}
+        </div>
+        <button class="btn" type="submit">Submit</button>
     </form>
 {% endblock %}
 

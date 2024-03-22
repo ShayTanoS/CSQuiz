@@ -10,18 +10,16 @@
     <title>CSQuiz</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
-<header>
-    <table class="header">
-        <thead class="">
-        <th>{% block head_left %}
-        {% endblock %}</th>
-        <th><a href="{% url 'home' %}"><img class="logo" src="{% static 'img/logo.png' %}" alt="logo"></a></th>
-        <th>{% block head_right %}
-        {% endblock %}</th>
-        </thead>
-    </table>
-</header>
 <body>
+<header class="d-flex p-2 justify-content-between align-items-center">
+    <div class="" style="width: 150px">{% block head_left %}
+    {% endblock %}</div>
+    <div class="d-flex justify-content-end" style="width: 150px">{% block head_right %}
+    {% endblock %}</div>
+</header>
+<div class="d-flex justify-content-center logo"><a href="{% url 'home' %}"><img class="logo"
+                                                                                    src="{% static 'img/logo.png' %}"
+                                                                                    alt="logo"></a></div>
 {% block content %}
 {% endblock %}
 </body>

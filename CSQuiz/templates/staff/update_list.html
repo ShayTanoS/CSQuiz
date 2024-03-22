@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>Update list</h1>
-    <a href="{% url 'add_player' %}">Add player</a>
-    <a href="{% url 'update_BD' %}">Update BD</a>
+    <a class='btn' href="{% url 'add_player' %}">Add player</a>
+    <a class='btn' href="{% url 'update_BD' %}">Update BD</a>
+    <a class="btn" href="{% url 'delete_player' %}">Delete player</a>
 {% endblock %}

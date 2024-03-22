@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block head_right %}
-    <div class="auth">
     {% if user.is_authenticated %}
 
         User: <a href="{% url 'profile' %}">{{ user }}</a>
@@ -9,15 +8,14 @@
             <button type="submit" class="btn">Log out</button>
         </form>
     {% else %}
-        <a href="{% url 'login' %}" class="button">Login</a>|<a class="button" href="{% url 'register' %}">Reg</a>
+        <a href="{% url 'login' %}" class="btn">Login</a>|<a class="btn" href="{% url 'register' %}">Reg</a>
     {% endif %}
-    </div>
 {% endblock %}
 {% block head_left %}
     {% if user.is_staff %}
-        <a class="button" href="{% url 'update_list' %}">Update</a>
+        <a class="btn" href="{% url 'update_list' %}">Update</a>
     {% endif %}
 {% endblock %}
 {% block content %}
-    <a class="button start-game" href="{% url 'quiz_page' %}">Let`s Go</a>
+    <a class="btn start-game" href="{% url 'quiz_page' %}">Let`s Go</a>
 {% endblock %}
