@@ -1,3 +1,4 @@
+import time
 import cfscrape
 from bs4 import BeautifulSoup as BS
 import re
@@ -22,7 +23,7 @@ def found_info(profile_number):
     nickname = soup.find(class_='playerNickname').text
     country = soup.find(class_='playerRealname').find('img')['alt']
     age = re.search(r'\d+', soup.find(class_='playerAge').text).group()
-    team = re.sub(r'Current teamTeam', '', soup.find(class_='playerTeam').text)
+    team = re.sub(r'Current teamTeam', '', soup.find(class_='playerTeam').text).split(' (')[0]
     major_winner = True if soup.findAll(class_='majorWinner') else False
     major_MVP = True if soup.findAll(class_='majorMVP') else False
     full_player_name = f"{name} '{nickname}' {surname}"
@@ -56,7 +57,7 @@ def update_player(player):
     html = scraper.get(url).content
     soup = BS(html, 'html.parser')
     age = re.search(r'\d+', soup.find(class_='playerAge').text).group()
-    team = re.sub(r'Current teamTeam', '', soup.find(class_='playerTeam').text)
+    team = re.sub(r'Current teamTeam', '', soup.find(class_='playerTeam').text).split(' (')[0]
     major_winner = True if soup.findAll(class_='majorWinner') else False
     major_MVP = True if soup.findAll(class_='majorMVP') else False
     url = f'https://www.hltv.org/player/{str(player.profile_number)}/find#tab-achievementBox'
