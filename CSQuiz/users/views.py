@@ -3,30 +3,30 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.core.mail import send_mail
 from random import randint
-from .models import EmailConfirmCodeHelperModel, User
+from .models import User
 from .forms import UserCreationForm, EmailConfirmForm
 # Create your views here.
 class Register(View):
     template_name = 'registration/register.html'
 
     def get(self, request):
+        request.session['code'] = 100221
         context = {'form': UserCreationForm()}
         return render(request, self.template_name, context)
 
     def post(self, request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            email = form.cleaned_data.get('email')
-            code = randint(100_000, 999_999)
+            request.session['username'] = form.cleaned_data.get('username')
+            request.session['password'] = form.cleaned_data.get('password1')
+            request.session['email'] = form.cleaned_data.get('email')
+            request.session['code'] = randint(100_000, 999_999)
             send_mail(
                 'Підтвердження email.',
-                f'You code {code}',
+                f'Your code {request.session["code"]}',
                 'cs2quiz2024@gmail.com',
-                [email]
+                [request.session['email']]
             )
-            EmailConfirmCodeHelperModel.objects.create(username=username, code=code, email=email,password=password)
             return redirect('email_confirm')
         context = {'form': form}
         return render(request, self.template_name, context)
@@ -40,17 +40,14 @@ class EmailConfirm(View):
 
     def post(self, request):
         form = EmailConfirmForm(request.POST)
-        form_data = EmailConfirmCodeHelperModel.objects.last()
         if form.is_valid():
-            if form.cleaned_data['code'] == form_data.code:
-                user = User.objects.create(username=form_data.username, email=form_data.email)
-                user.set_password(form_data.password)
+            if form.cleaned_data['code'] == request.session["code"]:
+                user = User.objects.create(username=request.session["username"], email=request.session["email"])
+                user.set_password(request.session["password"])
                 user.save()
-                user = authenticate(username=form_data.username, password=form_data.password)
+                user = authenticate(username=request.session["username"], password=request.session["password"])
                 login(request, user)
-                form_data.delete()
                 return redirect('home')
-        form_data.delete()
         return redirect('email_confirm_fail')
 
 
