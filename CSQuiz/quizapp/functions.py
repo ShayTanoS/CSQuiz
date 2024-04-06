@@ -1,7 +1,7 @@
-import time
 import cfscrape
 from bs4 import BeautifulSoup as BS
 import re
+from time import sleep
 from .models import Players
 from .constants import COUNTRY_REGIONS
 
@@ -12,12 +12,21 @@ def url_is_valid(sector, profile_number):
     status = scraper.get(url).status_code
     return status == 200
 
-
-def found_info(profile_number):
+def get_html(url):
     scraper = cfscrape.create_scraper()
+    response = scraper.get(url)
+    if response.status_code == 403:
+        status = 403
+        while status == 403:
+            response = scraper.get(url)
+            status = response.status_code
+    elif response.status_code == 429:
+        sleep(60)
+        response = scraper.get(url)
+    return BS(response.content, 'html.parser')
+def found_info(profile_number):
     url = f'https://www.hltv.org/player/{str(profile_number)}/find'
-    html = scraper.get(url).content
-    soup = BS(html, 'html.parser')
+    soup = get_html(url)
     name, *surname = soup.find(class_='playerRealname').text.split()
     surname = ' '.join(surname)
     nickname = soup.find(class_='playerNickname').text
@@ -30,19 +39,14 @@ def found_info(profile_number):
     for reg in COUNTRY_REGIONS:
         if country in COUNTRY_REGIONS[reg]:
             region = reg
+            break
 
     url = f'https://www.hltv.org/stats/players/weapon/{str(profile_number)}/find'
-    status = 403
-    while status == 403:
-        req = scraper.get(url)
-        status = req.status_code
-    html = req.content
-    soup = BS(html, 'html.parser')
+    soup = get_html(url)
     weapon = 'AWP' if soup.find(class_='stats-row').find_all('span')[1].text.strip() == 'awp' else 'Rifler'
 
     url = f'https://www.hltv.org/player/{str(profile_number)}/find#tab-achievementBox'
-    html = scraper.get(url).content
-    soup = BS(html, 'html.parser')
+    soup = get_html(url)
     res = soup.find(class_='sub-tab-content')
     if res.text.split()[0] == 'Major':
         major_played = res.find_all(class_='highlighted-stat')[1].find(class_='stat').text
@@ -52,17 +56,15 @@ def found_info(profile_number):
 
 
 def update_player(player):
-    scraper = cfscrape.create_scraper()
     url = f'https://www.hltv.org/player/{str(player.profile_number)}/find'
-    html = scraper.get(url).content
-    soup = BS(html, 'html.parser')
+    print(url)
+    soup = get_html(url)
     age = re.search(r'\d+', soup.find(class_='playerAge').text).group()
     team = re.sub(r'Current teamTeam', '', soup.find(class_='playerTeam').text).split(' (')[0]
     major_winner = True if soup.findAll(class_='majorWinner') else False
     major_MVP = True if soup.findAll(class_='majorMVP') else False
     url = f'https://www.hltv.org/player/{str(player.profile_number)}/find#tab-achievementBox'
-    html = scraper.get(url).content
-    soup = BS(html, 'html.parser')
+    soup = get_html(url)
     res = soup.find(class_='sub-tab-content')
     if res.text.split()[0] == 'Major':
         major_played = res.find_all(class_='highlighted-stat')[1].find(class_='stat').text
@@ -105,10 +107,8 @@ def add_player_to_DB(number):
 
 def add_team_to_DB(number):
     if url_is_valid('team', number):
-        scraper = cfscrape.create_scraper()
         url = f'https://www.hltv.org/team/{str(number)}/find'
-        html = scraper.get(url).content
-        soup = BS(html, 'html.parser')
+        soup = get_html(url)
         player_list = [i['href'].split('/')[2] for i in soup.find(class_='bodyshot-team g-grid').find_all('a')]
         message = []
         for number in player_list:
