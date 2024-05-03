@@ -5,7 +5,6 @@ from time import sleep
 from .models import Players
 from .constants import COUNTRY_REGIONS
 
-
 def url_is_valid(sector, profile_number):
     scraper = cfscrape.create_scraper()
     url = f'https://www.hltv.org/{sector}/{str(profile_number)}/find'
@@ -15,14 +14,14 @@ def url_is_valid(sector, profile_number):
 def get_html(url):
     scraper = cfscrape.create_scraper()
     response = scraper.get(url)
-    if response.status_code == 403:
-        status = 403
-        while status == 403:
-            response = scraper.get(url)
-            status = response.status_code
-    elif response.status_code == 429:
-        sleep(60)
+    status = response.status_code
+    while status == 403:
         response = scraper.get(url)
+        status = response.status_code
+    while status == 429:
+        sleep(30)
+        response = scraper.get(url)
+        status = response.status_code
     return BS(response.content, 'html.parser')
 def found_info(profile_number):
     url = f'https://www.hltv.org/player/{str(profile_number)}/find'
@@ -116,4 +115,3 @@ def add_team_to_DB(number):
         return message
     else:
         return ['Invalid URL']
-

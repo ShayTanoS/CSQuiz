@@ -57,9 +57,12 @@ def delete_player(request):
 class QuizView(View):
     template_name = 'quiz_page.html'
     players = Players.objects.all()
+
     def get(self, request):
         request.session['mystery_player'] = random.choice(self.players).profile_number
         request.session['samples_list'] = []
+        request.session['game_over'] = False
+        request.session['win'] = False
         context = {'players': self.players}
         return render(request, self.template_name, context)
 
@@ -67,21 +70,25 @@ class QuizView(View):
         mystery_player = self.players.get(profile_number=request.session['mystery_player'])
         current_player = self.players.get(full_player_name=request.POST['button'])
         samples_list = [self.players.get(profile_number=i) for i in request.session['samples_list']]
-        win = current_player == mystery_player
-        game_over = win or len(samples_list)+1 >= 8
-        if game_over:
-            user = request.user
-            if user.is_authenticated:
-                samples_list.append(current_player)
-                if win:
-                    user.quizzes_win += 1
-                else:
-                    user.quizzes_lose += 1
-                user.save()
-        else:
-            request.session['samples_list'].append(current_player.profile_number)
-            request.session.modified = True
-            samples_list.append(current_player)
+        samples_list.append(current_player)
+        if not request.session['game_over']:
+            if current_player == mystery_player:
+                request.session['win'] = True
+            if request.session['win'] or len(samples_list) + 1 == 8:
+                request.session['game_over'] = True
+                request.session.modified = True
+            if request.session['game_over']:
+                user = request.user
+                if user.is_authenticated:
+                    if request.session['win']:
+                        user.quizzes_win += 1
+                    else:
+                        user.quizzes_lose += 1
+                    user.save()
+            else:
+                request.session['samples_list'].append(current_player.profile_number)
+                request.session.modified = True
         context = {'players': self.players, 'samples_list': samples_list,
-                   'mystery_player': mystery_player, 'win': win, 'game_over': game_over}
+                   'mystery_player': mystery_player, 'win': request.session['win'],
+                   'game_over': request.session['game_over']}
         return render(request, self.template_name, context)
