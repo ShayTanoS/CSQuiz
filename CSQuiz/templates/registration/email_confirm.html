@@ -2,9 +2,9 @@
 {% block content %}
     <form action="{% url 'email_confirm' %}" method="post">
         {% csrf_token %}
-        <div class="form">
+        <div  class="d-flex justify-content-center form">
             {{ form }}
         </div>
-        <button class='btn' type="submit">Submit</button>
+        <div class='d-flex justify-content-center'><button class='btn' type="submit">Submit</button></div>
     </form>
 {% endblock %}

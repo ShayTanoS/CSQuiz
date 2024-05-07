@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-  <h1>Update</h1>
-    <script src="{% static 'js/script.js' %}"></script>
-    <div id="myDropdown" class="dropdown-content">
-        <form action="{% url 'update_BD' %}" method="post">
+    <div>
+        <h1 class="d-flex justify-content-center">Update</h1>
+        <script src="{% static 'js/script.js' %}"></script>
+        <div id="myDropdown" class="dropdown-content">
+            <form action="{% url 'update_BD' %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                {% for item in players %}
+                    <button class='btn' type="submit" value="{{ item }}" name="button">{{ item }}</button>
+                {% endfor %}
+            </form>
+        </div>
+        <form class="d-flex justify-content-center" action="{% url 'update_BD' %}" method='post'>
             {% csrf_token %}
-            <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-            {% for item in players %}
-                <button class='btn' type="submit" value="{{ item }}" name="button">{{ item }}</button>
-            {% endfor %}
+            <button class='btn' type="submit" value="all" name="button">Update All</button>
         </form>
     </div>
-    <form action="{% url 'update_BD' %}" method='post'>
-        {% csrf_token %}
-        <button class='btn' type="submit" value="all" name="button">Update All</button>
-    </form>
-
 {% endblock %}

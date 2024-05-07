@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form action="{% url 'add_player' %}" method="post">
-    <h1>Add Player</h1>
-        {% csrf_token %}
-        {{ form }}
-        <button class='btn' type="submit" value="player" name="button">Submit</button>
-    </form>
-    <form action="{% url 'add_player' %}" method="post">
-    <h1>Add Team</h1>
-        {% csrf_token %}
-        {{ form }}
-        <button class='btn' type="submit" value="team" name="button">Submit</button>
-        {% for m in message %}
-            <h2>{{ m }}</h2>
-        {% endfor %}
-    </form>
+    <div class="d-flex justify-content-center">
+        <form action="{% url 'add_player' %}" method="post">
+            <h1>Add Player</h1>
+            {% csrf_token %}
+            {{ form }}
+            <button class='btn' type="submit" value="player" name="button">Submit</button>
+        </form>
+        <form action="{% url 'add_player' %}" method="post">
+            <h1>Add Team</h1>
+            {% csrf_token %}
+            {{ form }}
+            <button class='btn' type="submit" value="team" name="button">Submit</button>
+            {% for m in message %}
+                <h2>{{ m }}</h2>
+            {% endfor %}
+        </form>
+    </div>
 {% endblock %}

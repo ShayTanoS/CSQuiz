@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-	<h1>Hi {{ user.username }}</h1>
-    <h1>You stats {{ user.quizzes_win }}/{{ user.quizzes_lose }}</h1>
+    <div>
+        <h1 class="d-flex justify-content-center">Hi {{ user.username }}</h1>
+        <h1 class="d-flex justify-content-center">You stats {{ user.quizzes_win }}/{{ user.quizzes_lose }}</h1>
+    </div>
 {% endblock %}
