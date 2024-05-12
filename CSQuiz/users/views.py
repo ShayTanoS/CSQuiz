@@ -5,6 +5,8 @@ from django.core.mail import send_mail
 from random import randint
 from .models import User
 from .forms import UserCreationForm, EmailConfirmForm
+
+
 # Create your views here.
 class Register(View):
     template_name = 'registration/register.html'
@@ -34,6 +36,7 @@ class Register(View):
 
 class EmailConfirm(View):
     template_name = 'registration/email_confirm.html'
+
     def get(self, request):
         context = {'form': EmailConfirmForm()}
         return render(request, self.template_name, context)
@@ -54,3 +57,15 @@ class EmailConfirm(View):
 def profile_view(request):
     if request.method == 'GET':
         return render(request, 'profile.html')
+
+
+def handler404(request, exception=None):
+    return render(request, 'handlers/404.html')
+
+
+def handler403(request, exception=None):
+    return render(request, 'handlers/403.html')
+
+
+def handler500(request, exception=None):
+    return render(request, 'handlers/500.html')

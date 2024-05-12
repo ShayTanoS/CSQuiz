@@ -17,9 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from django.conf.urls import handler404, handler500, handler403
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('users/', include('users.urls')),
     path('', include('quizapp.urls')),
 ]
+
+handler403 = 'users.views.handler403'
+handler404 = 'users.views.handler404'
+handler500 = 'users.views.handler500'

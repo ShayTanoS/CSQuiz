@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="d-flex flex-column align-items-center">
+        {% block content_error %}
+        {% endblock %}
+        <img src="{% static 'img/error.png' %}" alt="error">
+    </div>
+{% endblock %}

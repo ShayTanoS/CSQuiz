@@ -4,11 +4,17 @@ from django.views import View
 from .models import Players
 from .functions import add_player_to_DB, add_team_to_DB, update_player
 import random
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 
-# Create your views here.
+def staff_only(user):
+    return user.is_staff
+
+@method_decorator(staff_member_required, name='dispatch')
 class AddPlayerView(View):
     template_name = 'staff/add_player.html'
+
 
     def get(self, request):
         form = AddPlayerForm()
@@ -28,6 +34,7 @@ class AddPlayerView(View):
         return render(request, self.template_name, context)
 
 
+@staff_member_required
 def update_BD(request):
     players = Players.objects.all()
     context = {'players': players}
@@ -43,6 +50,7 @@ def update_BD(request):
         return render(request, 'staff/update_BD.html', context)
 
 
+@staff_member_required
 def delete_player(request):
     players = Players.objects.all()
     context = {'players': players}
