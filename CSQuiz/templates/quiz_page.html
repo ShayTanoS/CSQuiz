@@ -71,7 +71,7 @@
         <div id="myDropdown" class="dropdown-content">
             <form action="{% url 'quiz_page' %}" method="post">
                 {% csrf_token %}
-                <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                <input type="text" placeholder="Search.." id="myInput" autocomplete="off" onkeyup="filterFunction()">
                 {% for item in players %}
                     <button class='btn' type="submit" value="{{ item }}"
                             name="button">{{ item }}</button>

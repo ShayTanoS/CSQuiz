@@ -1,4 +1,3 @@
-
 from django.urls import path, include
 from django.views.generic import TemplateView
 from .views import Register, EmailConfirm, profile_view
